@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+        }
+        canvas {
+            background-color: #20232a;
+            border: 2px solid #61dafb;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        #difficultyScreen, #gameOverScreen {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #61dafb;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .difficulty-button, #playAgainButton {
+            background-color: #61dafb;
+            color: #282c34;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .difficulty-button:hover, #playAgainButton:hover {
+            background-color: #21a1f1;
+            transform: scale(1.05);
+        }
+        #logout {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #61dafb;
+            color: #282c34;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #logout:hover {
+            background-color: #21a1f1;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <div id="difficultyScreen">
+        <h1>Select Difficulty</h1>
+        <button class="difficulty-button" data-speed="200">Beginner</button>
+        <button class="difficulty-button" data-speed="100">Harder</button>
+    </div>
+    <div id="gameOverScreen">
+        <h1>Game Over</h1>
+        <p id="finalScore"></p>
+        <p id="highestScore"></p>
+        <button id="playAgainButton">Play Again</button>
+    </div>
+    <a id="logout" href="{{ url_for('logout') }}">Logout</a>
+    <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
+</html>
