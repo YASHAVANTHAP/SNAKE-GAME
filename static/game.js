@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const finalScore = document.getElementById('finalScore');
     const highestScore = document.getElementById('highestScore');
     const difficultyButtons = document.querySelectorAll('.difficulty-button');
-
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const gameOverSound = document.getElementById('gameOverSound');
     const gridSize = 20;
     const canvasSize = canvas.width;
 
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function showDifficultyScreen() {
         difficultyScreen.style.display = 'block';
+        gameOverScreen.style.display = 'none';  // Ensure game over screen is hidden
     }
 
     function initGame() {
@@ -44,6 +46,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         gameOverScreen.style.display = 'none';
         canvas.style.display = 'block';
+        backgroundMusic.play().catch(error => {
+            console.error('Background music error:', error);
+        });
         gameLoop();
     }
 
@@ -100,7 +105,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 x: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize,
                 y: Math.floor(Math.random() * (canvasSize / gridSize)) * gridSize
             };
-            score += 10;
+            score += 1;
         } else {
             snake.pop();
         }
@@ -174,6 +179,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function endGame() {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+
+        // Play the game over sound
+        gameOverSound.currentTime = 0;
+        gameOverSound.play().catch(error => {
+            console.error('Game over sound error:', error);
+        });
         canvas.style.display = 'none';
         gameOverScreen.style.display = 'block';
     }
