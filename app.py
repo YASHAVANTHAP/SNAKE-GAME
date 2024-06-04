@@ -3,7 +3,7 @@ from flask_bcrypt import Bcrypt
 import sqlite3
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = '12345'
 bcrypt = Bcrypt(app)
 
 def get_db_connection():
@@ -56,8 +56,10 @@ def logout():
 @app.route('/submit_score', methods=['POST'])
 def submit_score():
     if 'user_id' not in session:
-        return jsonify(success=False)
-    score = request.json['score']
+        return jsonify(success=False), 401  # Unauthorized
+    score = request.json.get('score')
+    if score is None:
+        return jsonify(success=False, error="Score not provided"), 400  # Bad request
     conn = get_db_connection()
     conn.execute('INSERT INTO scores (user_id, score) VALUES (?, ?)', (session['user_id'], score))
     conn.commit()
@@ -67,11 +69,11 @@ def submit_score():
 @app.route('/get_high_score')
 def get_high_score():
     if 'user_id' not in session:
-        return jsonify(score=0)
+        return jsonify(score=0), 401  # Unauthorized
     conn = get_db_connection()
     high_score = conn.execute('SELECT MAX(score) AS high_score FROM scores WHERE user_id = ?', (session['user_id'],)).fetchone()
     conn.close()
-    return jsonify(score=high_score['high_score'] if high_score['high_score'] else 0)
+    return jsonify(score=high_score['high_score'] if high_score['high_score'] is not None else 0)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) 
